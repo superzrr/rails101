@@ -34,6 +34,11 @@ class GroupsController < ApplicationController
       redirect_to groups_path
     end
 
+    def search
+      @group = Group.find(params[:title])
+      redirect_to groups_path,notice:"Found "+@group.count
+    end
+
     private
 
     def group_params
