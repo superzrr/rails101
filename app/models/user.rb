@@ -8,6 +8,6 @@ class User < ApplicationRecord
          has_many :posts
 
          has_many :group_relationships
-         has_many :participated_group, :through => :group_relationships, :source =>:group
+         has_many :participated_groups, :through => :group_relationships, :source =>:group
 
 end
