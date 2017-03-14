@@ -66,7 +66,7 @@ class GroupsController < ApplicationController
       end
     end
 
-    def join(
+    def join
       @group = Group.find(params[:id])
 
       if !current_user.is_member_of?(@group)
@@ -89,6 +89,7 @@ class GroupsController < ApplicationController
         flash[:notice] = "You're not member of group"
       end
 
-      redirect_to group_path@group)
+      redirect_to group_path(@group)
+    end
 
 end
