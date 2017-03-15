@@ -1,5 +1,6 @@
 class PostsController < ApplicationController
-  before_action :authenticate_user!, :only=>[:new, :create]
+  before_action :authenticate_user!, :only=>[:new, :create,:edit,:update,:destroy]
+  before_action :find_post_and_check_permission, :only=>[:edit,:update,:destroy]
 
   def index
     @posts = Group.find(params[:id]).all
@@ -23,9 +24,36 @@ class PostsController < ApplicationController
     end
   end
 
+  def edit
+  end
+
+  def update
+    if @post.update(post_params)
+      redirect_to group_posts_path(@group,@post)
+    else
+      render :edit
+    end
+  end
+
+  def destroy
+    @group = Group.find(params[:group_id])
+    @post =  Post.find(params[:id])
+    @post.destroy
+    redirect_to group_posts_path(@group)
+  end
+
   private
 
   def post_params
     params.require(:post).permit(:content)
+  end
+
+  def find_post_and_check_permission
+    @group = Group.find(params[:group_id])
+    @post = Post.find(params[:id])
+
+    if current_user != @post.user
+      redirect_to group_posts_path, alert:"You have no permission"
+    end
   end
 end
